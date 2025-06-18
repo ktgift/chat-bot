@@ -1,85 +1,12 @@
-import { useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { Colors } from "../constant";
 import type { Message } from "../types";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
+import { useChatStore } from "../store/chatStore";
 
 export const ChatInterface = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      text: "สวัสดีครับ! ผมอินโฟมากไทยคอนเปรเซ็นต์อีเวนต์พารามิเตอร์ไทย ไลน์ไอดีอีซิแขปนไลซ์ครับ\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ?",
-      isBot: false,
-      showActions: false,
-    },
-    {
-      id: "2",
-      text: "สวัสดีครับ! ผมอินโฟมากไทยคอนเปรเซ็นต์อีเวนต์พารามิเตอร์ไทย ไลน์ไอดีอีซิแขปนไลซ์ครับ\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ? และคุณสามารถถามอีโยคลอพพารามิเตอร์อย่างต้องการให้ผมเบอนเปิดอัน\nเป็นไลน์ไอดีใดอยครับ",
-      isBot: true,
-      showActions: true,
-    },
-    {
-      id: "3",
-      text: "ขอถามต่อหน่อย\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ?",
-      isBot: false,
-      showActions: false,
-    },
-    {
-      id: "3",
-      text: "ถ้าคุณมีความต้องการพิเศษเกี่ยวกับประเทศของไลค์ (เช่น HTML/CSS, React, หรือภาษาอื่น ๆ) กบกบากฟลได\nมะรับ",
-      isBot: true,
-      showActions: true,
-    },
-    {
-      id: "1",
-      text: "สวัสดีครับ! ผมอินโฟมากไทยคอนเปรเซ็นต์อีเวนต์พารามิเตอร์ไทย ไลน์ไอดีอีซิแขปนไลซ์ครับ\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ?",
-      isBot: false,
-      showActions: false,
-    },
-    {
-      id: "2",
-      text: "สวัสดีครับ! ผมอินโฟมากไทยคอนเปรเซ็นต์อีเวนต์พารามิเตอร์ไทย ไลน์ไอดีอีซิแขปนไลซ์ครับ\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ? และคุณสามารถถามอีโยคลอพพารามิเตอร์อย่างต้องการให้ผมเบอนเปิดอัน\nเป็นไลน์ไอดีใดอยครับ",
-      isBot: true,
-      showActions: true,
-    },
-    {
-      id: "3",
-      text: "ขอถามต่อหน่อย\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ?",
-      isBot: false,
-      showActions: false,
-    },
-    {
-      id: "3",
-      text: "ถ้าคุณมีความต้องการพิเศษเกี่ยวกับประเทศของไลค์ (เช่น HTML/CSS, React, หรือภาษาอื่น ๆ) กบกบากฟลได\nมะรับ",
-      isBot: true,
-      showActions: true,
-    },
-    {
-      id: "1",
-      text: "สวัสดีครับ! ผมอินโฟมากไทยคอนเปรเซ็นต์อีเวนต์พารามิเตอร์ไทย ไลน์ไอดีอีซิแขปนไลซ์ครับ\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ?",
-      isBot: false,
-      showActions: false,
-    },
-    {
-      id: "2",
-      text: "สวัสดีครับ! ผมอินโฟมากไทยคอนเปรเซ็นต์อีเวนต์พารามิเตอร์ไทย ไลน์ไอดีอีซิแขปนไลซ์ครับ\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ? และคุณสามารถถามอีโยคลอพพารามิเตอร์อย่างต้องการให้ผมเบอนเปิดอัน\nเป็นไลน์ไอดีใดอยครับ",
-      isBot: true,
-      showActions: true,
-    },
-    {
-      id: "3",
-      text: "ขอถามต่อหน่อย\n\nคุณต้องการให้ผมช่วยอะไรปันอินเปิบพีเคยโอเพจครับ?",
-      isBot: false,
-      showActions: false,
-    },
-    {
-      id: "3",
-      text: "ถ้าคุณมีความต้องการพิเศษเกี่ยวกับประเทศของไลค์ (เช่น HTML/CSS, React, หรือภาษาอื่น ๆ) กบกบากฟลได\nมะรับ",
-      isBot: true,
-      showActions: true,
-    },
-  ]);
+  const { setMessageList, messageList } = useChatStore();
 
   const handleSendMessage = (text: string) => {
     const userMessage: Message = {
@@ -88,7 +15,7 @@ export const ChatInterface = () => {
       isBot: false,
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    setMessageList(userMessage);
 
     // Simulate bot response
     setTimeout(() => {
@@ -98,7 +25,7 @@ export const ChatInterface = () => {
         isBot: true,
         showActions: true,
       };
-      setMessages((prev) => [...prev, botMessage]);
+      setMessageList(botMessage);
     }, 1000);
   };
 
@@ -111,7 +38,7 @@ export const ChatInterface = () => {
     >
       <Box flex={1} overflow="auto" p={2}>
         <Container maxWidth="lg">
-          {messages.map((message) => (
+          {messageList.map((message) => (
             <ChatMessage
               key={message.id}
               message={message.text}

@@ -1,6 +1,7 @@
 import { Box, Divider, Drawer as MuiDrawer, drawerClasses, styled, Typography, Stack, Avatar, Button, IconButton } from "@mui/material"
-import logo from '../assets/image/logo.png';
+import logo2 from '../assets/image/logo2.jpg';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { useChatStore } from "../store/chatStore";
 
 const drawerWidth = 60;
 const Drawer = styled(MuiDrawer)({
@@ -15,6 +16,13 @@ const Drawer = styled(MuiDrawer)({
 });
 
 export const SideBar = () => {
+  const { clearMessageList } = useChatStore();
+
+  const handleClearChat = () => {
+    console.log("Chat cleared");
+    clearMessageList();
+  };
+
   return (
     <Drawer
       variant="permanent"
@@ -33,7 +41,7 @@ export const SideBar = () => {
           p: 1.5,
         }}
       >
-        <img src={logo} alt="Logo" style={{ width: 50, height: 50 }} />
+        <img src={logo2} alt="Logo" style={{ width: 58, height: 58 }} />
       </Box>
       <Divider />
       <Box
@@ -44,7 +52,7 @@ export const SideBar = () => {
           flexDirection: 'column',
         }}
       >
-        <IconButton>
+        <IconButton onClick={handleClearChat}>
           <AddCircleIcon fontSize="large" color="primary" />
         </IconButton>
       </Box>
