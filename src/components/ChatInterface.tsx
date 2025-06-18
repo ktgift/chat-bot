@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { Colors } from "../constant";
 import type { Message } from "../types";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
+import { v4 as uuidv4 } from "uuid";
 
 export const ChatInterface = () => {
+  const [threadId, setThreadId] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -81,6 +83,13 @@ export const ChatInterface = () => {
     },
   ]);
 
+  useEffect(() => {
+    if (!threadId) {
+      const newThreadId = uuidv4();
+      setThreadId(newThreadId);
+    }
+  }, []);
+
   const handleSendMessage = (text: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -123,8 +132,8 @@ export const ChatInterface = () => {
       </Box>
 
       <Container maxWidth="lg" sx={{ width: "100%" }}>
-        <ChatInput onSendMessage={handleSendMessage} />
-         <Box mb={2} display={"flex"} justifyContent="flex-end">
+        <ChatInput threadId={threadId} onSendMessage={handleSendMessage} />
+        <Box mb={2} display={"flex"} justifyContent="flex-end">
           <Typography variant="caption" color="text.secondary">
             Chat-Bot can make mistakes. Please double-check responses.
           </Typography>
