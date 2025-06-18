@@ -1,27 +1,38 @@
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
-import React from 'react';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ReplayIcon from '@mui/icons-material/Replay';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ReplayIcon from "@mui/icons-material/Replay";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import {
+  Box,
+  Card,
+  CardContent,
+  IconButton,
+  Typography
+} from "@mui/material";
+import { Colors } from "../constant";
 
-interface ChatMessageProps {
+type Props = {
   message: string;
   isBot?: boolean;
   showActions?: boolean;
-}
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message, isBot = false, showActions = false }) => {
+};
+
+const ChatMessage = ({
+  message,
+  isBot = false,
+  showActions = false,
+}: Props) => {
   return (
     <Box
       display="flex"
-      justifyContent={isBot ? 'flex-start' : 'flex-end'}
-      mb={2}
+      justifyContent={isBot ? "flex-start" : "flex-end"}
+      mb={3}
     >
-      <Box sx={{ maxWidth: '48rem', width: isBot ? '100%' : 'auto' }}>
-        {isBot && (
-          <Box display="flex" alignItems="center" mb={1}>
-            <Box
+      <Box sx={{ maxWidth: "74rem", width: isBot ? "100%" : "auto" }}>
+        {!isBot && (
+          <Box display="flex-end" alignItems="center" mb={1}>
+            {/* <Box
               sx={{
                 width: 24,
                 height: 24,
@@ -37,61 +48,88 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, isBot = false, showA
               }}
             >
               CY
-            </Box>
-            <Typography variant="body2" color="text.secondary">
+            </Box> */}
+            {/* <Typography variant="body2" color="text.secondary">
               คุยกับอินโฟมากไทย
-            </Typography>
+            </Typography> */}
           </Box>
         )}
 
-        <Card
-          sx={{
-            backgroundColor: isBot ? 'white' : 'primary.main',
-            color: isBot ? 'text.primary' : 'white',
-            boxShadow: 1
-          }}
-        >
-          <CardContent sx={{ p: 2 }}>
-            <Typography
-              variant="body2"
-              sx={{
-                whiteSpace: 'pre-wrap',
-                lineHeight: 1.6
-              }}
-            >
-              {message}
-            </Typography>
-          </CardContent>
-        </Card>
+        {!isBot && (
+          <Card
+            elevation={0}
+            sx={{
+              backgroundColor:  Colors.yellowGray,
+              borderRadius: 3
+            }}
+          >
+            <CardContent sx={{ p: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.2,
+                  color: "text.primary",
+                }}
+              >
+                {message}
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
+
+        {isBot && (
+          <Box
+            sx={{
+              color: "text.primary",
+              py: 2,
+              // backgroundColor:'red'
+            }}
+          >
+              <Typography
+                variant="body2"
+                sx={{
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.2,
+                }}
+              >
+                {message}
+              </Typography>
+          </Box>
+        )}
 
         {showActions && isBot && (
           <Box
             display="flex"
-            justifyContent="space-between"
-            alignItems="center"
+            flexDirection="column"
+            // justifyContent="space-between"
+            alignItems="flex-start"
             mt={2}
           >
             <Box display="flex" alignItems="center" gap={1}>
-              <Button size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
+              <IconButton size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
                 <ContentCopyIcon fontSize="small" />
-              </Button>
-              <Button size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
+              </IconButton>
+              <IconButton size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
                 <ThumbUpOffAltIcon fontSize="small" />
-              </Button>
-              <Button size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
+              </IconButton>
+              <IconButton size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
                 <ThumbDownOffAltIcon fontSize="small" />
-              </Button>
-              <Button
+              </IconButton>
+              <IconButton
                 size="small"
-                sx={{ height: 32, px: 1, display: 'flex', alignItems: 'center', gap: 0.5 }}
+                sx={{
+                  height: 32,
+                  px: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                }}
               >
                 <ReplayIcon fontSize="small" />
                 <Typography variant="caption">Retry</Typography>
-              </Button>
+              </IconButton>
             </Box>
-            <Typography variant="caption" color="text.secondary">
-              Claude can make mistakes. Please double-check responses.
-            </Typography>
           </Box>
         )}
       </Box>

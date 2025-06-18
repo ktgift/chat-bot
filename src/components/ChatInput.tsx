@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { Colors } from '../constant';
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { Box, Button, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { Colors } from "../constant";
 
-interface ChatInputProps {
+type Props = {
   onSendMessage: (message: string) => void;
   disabled?: boolean;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }) => {
-  const [message, setMessage] = useState('');
+const ChatInput = ({
+  onSendMessage,
+  disabled = false,
+}: Props) => {
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim() && !disabled) {
       onSendMessage(message.trim());
-      setMessage('');
+      setMessage("");
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
@@ -28,27 +31,27 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
 
   return (
     <Box
-      // component="div"
       sx={{
-        borderTop: '1px solid #e0e0e0',
-        backgroundColor: 'white',
+        border: "1px solid #e0e0e0",
+        backgroundColor: "white",
+        borderRadius: 4,
         p: 2,
-        marginBottom: 4,
+        marginBottom: 1,
       }}
     >
       <Box
         component="form"
         onSubmit={handleSubmit}
-        sx={{ position: 'relative' }}
+        sx={{ position: "relative" }}
       >
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'flex-end',
+            display: "flex",
+            alignItems: "flex-end",
             gap: 2,
           }}
         >
-          <Box sx={{ flex: 1, position: 'relative' }}>
+          <Box sx={{ flex: 1, position: "relative" }}>
             <TextField
               fullWidth
               value={message}
@@ -59,19 +62,32 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
               multiline
               minRows={1}
               maxRows={4}
+              variant="standard"
               InputProps={{
+                disableUnderline: true, // สำหรับ variant="standard"
                 sx: {
                   pr: 6,
                   py: 1.5,
+                  border: "none",
+                  "& fieldset": {
+                    border: "none", // ซ่อน outlined border ถ้าใช้ variant="outlined"
+                  },
                 },
               }}
             />
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
-            <Typography variant="body2" color="text.secondary">
-              Claude Sonnet 4
-            </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              flexShrink: 0,
+            }}
+          >
+            {/* <Typography variant="body2" color="text.secondary">
+              Chat-bot 4
+            </Typography> */}
             <Button
               size="small"
               disabled={disabled || !message.trim()}
@@ -80,10 +96,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
                 minWidth: 32,
                 height: 32,
                 p: 0,
-                borderRadius: '50%',
+                borderRadius: "50%",
                 backgroundColor: Colors.orangeLight,
-                '&:hover': {
+                "&:hover": {
                   backgroundColor: Colors.orangeDark || Colors.orangeLight,
+                  color: "white"
                 },
               }}
             >
