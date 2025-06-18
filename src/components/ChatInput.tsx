@@ -28,11 +28,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
 
   return (
     <Box
-      component="div"
+      // component="div"
       sx={{
         borderTop: '1px solid #e0e0e0',
         backgroundColor: 'white',
         p: 2,
+        marginBottom: 4,
       }}
     >
       <Box
