@@ -30,6 +30,32 @@ export const ChatInterface = () => {
     }, 1000);
   };
 
+  const handleLikeMessage = (id: string) => {
+    const message = messageList.find((msg: Message) => msg.id === id);
+    const newMessage: Message = {
+      id,
+      text: message?.text || "",
+      isBot: message?.isBot || false,
+      showActions: message?.showActions || false,
+      isLiked: true,
+      isDisliked: false,
+    };
+    setMessageList(newMessage);
+  }
+
+  const handleDisLikeMessage = (id: string) => {
+    const message = messageList.find((msg: Message) => msg.id === id);
+    const newMessage: Message = {
+      id,
+      text: message?.text || "",
+      isBot: message?.isBot || false,
+      showActions: message?.showActions || false,
+      isLiked: false,
+      isDisliked: true,
+    };
+    setMessageList(newMessage);
+  };
+
   return (
     <Box
       display="flex"
@@ -42,9 +68,14 @@ export const ChatInterface = () => {
           {messageList.map((message) => (
             <ChatMessage
               key={message.id}
+              id={message.id}
               message={message.text}
               isBot={message.isBot}
               showActions={message.showActions}
+              isLiked={message.isLiked}
+              isDisliked={message.isDisliked}
+              onLike={handleLikeMessage}
+              onDislike={handleDisLikeMessage}
             />
           ))}
         </Container>

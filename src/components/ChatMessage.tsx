@@ -10,19 +10,28 @@ import {
   Typography
 } from "@mui/material";
 import { Colors } from "../constant";
+import { useChatStore } from "../store/chatStore";
 
 type Props = {
+  id?: string;
   message: string;
   isBot?: boolean;
   showActions?: boolean;
-
+  isLiked?: boolean;
+  isDisliked?: boolean;
+  onLike: (id: string) => void;
+  onDislike: (id: string) => void;
 };
 
 const ChatMessage = ({
+  id,
   message,
   isBot = false,
   showActions = false,
+  isLiked = false,
+  isDisliked = false,
 }: Props) => {
+  const { toggleLike, toggleDislike } = useChatStore();
   return (
     <Box
       display="flex"
@@ -107,13 +116,27 @@ const ChatMessage = ({
             mt={2}
           >
             <Box display="flex" alignItems="center" gap={1}>
-              <IconButton size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
+              <IconButton size="small" 
+                sx={{ minWidth: 32, height: 32, p: 0 }}
+              >
                 <ContentCopyIcon fontSize="small" />
               </IconButton>
-              <IconButton size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
+              <IconButton size="small" 
+                sx={{ 
+                  minWidth: 32, height: 32, p: 0,
+                  color: isLiked ? Colors.orangeDark : "text.secondary",
+                 }} 
+                onClick={() => toggleLike(id || "")}
+              >
                 <ThumbUpOffAltIcon fontSize="small" />
               </IconButton>
-              <IconButton size="small" sx={{ minWidth: 32, height: 32, p: 0 }}>
+              <IconButton size="small" 
+                sx={{ 
+                  minWidth: 32, height: 32, p: 0,
+                  color: isDisliked ? Colors.orangeDark : "text.secondary",
+                }}
+                onClick={() => toggleDislike(id || "")}
+              >
                 <ThumbDownOffAltIcon fontSize="small" />
               </IconButton>
               <IconButton
