@@ -1,6 +1,6 @@
-import { Box, Divider, Drawer as MuiDrawer, drawerClasses, styled, Typography, Stack, Avatar, Button, IconButton } from "@mui/material"
-import logo2 from '../assets/image/logo2.jpg';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { Avatar, Box, Divider, drawerClasses, IconButton, Drawer as MuiDrawer, Stack, styled } from "@mui/material";
+import logo from '../assets/image/logo.png';
 import { useChatStore } from "../store/chatStore";
 
 const drawerWidth = 60;
@@ -41,7 +41,7 @@ export const SideBar = () => {
           p: 1.5,
         }}
       >
-        <img src={logo2} alt="Logo" style={{ width: 58, height: 58 }} />
+        <img src={logo} alt="Logo" style={{ width: 40, height: 40 }} />
       </Box>
       <Divider />
       <Box
@@ -53,7 +53,7 @@ export const SideBar = () => {
         }}
       >
         <IconButton onClick={handleClearChat}>
-          <AddCircleIcon fontSize="large" color="primary" />
+          <AddCircleIcon fontSize="large" sx={{ color: 'black' }} />
         </IconButton>
       </Box>
       <Stack

@@ -18,6 +18,7 @@ export const ChatInterface = () => {
     setMessageList(userMessage);
 
     // Simulate bot response
+    // ใช้ text ส่งให้ api
     setTimeout(() => {
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
