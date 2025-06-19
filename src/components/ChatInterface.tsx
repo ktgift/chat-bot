@@ -109,7 +109,9 @@ export const ChatInterface = () => {
     >
       <Box flex={1} overflow="auto" p={2}>
         <Container maxWidth="lg">
-          {messageList.map((message) => (
+          {messageList.map((message, index) => {
+            const lastMessage = index === messageList.length - 1;
+            return (
             <ChatMessage
               key={message.id}
               id={message.id}
@@ -121,8 +123,10 @@ export const ChatInterface = () => {
               onLike={handleLikeMessage}
               onDislike={handleDisLikeMessage}
               onCopy={copyClipboard}
+              isAnimated={lastMessage && message.isBot && !isLoading}
             />
-          ))}
+          )
+          })}
         </Container>
       </Box>
 
