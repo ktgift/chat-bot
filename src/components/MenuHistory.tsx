@@ -7,13 +7,15 @@ import Stack from "@mui/material/Stack";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useChatStore } from "../store/chatStore";
 import { Typography } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { getMessages } from "../api";
 
 type Props = {
   open: boolean;
 };
 
 export const MenuHistory = ({ open }: Props) => {
-  const { clearMessageList, setThreadId } = useChatStore();
+  const { clearMessageList, setThreadId, setNewThreadId } = useChatStore();
 
   const mainListItems = [
     {
@@ -22,16 +24,19 @@ export const MenuHistory = ({ open }: Props) => {
     },
   ];
 
-  const historyList = [
-    { id: "1", title: "Chat with John", date: "2023-10-01" },
-    { id: "2", title: "Project Discussion", date: "2023-10-02" },
-    { id: "3", title: "Feedback Session", date: "2023-10-03" },
-  ];
+  const { data: historyList } = useQuery({
+    queryKey: ["messages"],
+    queryFn: () => getMessages(),
+  });
 
   const handleClearChat = () => {
     console.log("Chat cleared");
     clearMessageList();
-    setThreadId();
+    setNewThreadId();
+  };
+
+  const onChangeThread = (id: string) => {
+    setThreadId(id);
   };
 
   // const handleSelectHistory = (item: type) => {
@@ -64,11 +69,9 @@ export const MenuHistory = ({ open }: Props) => {
           </Typography>
         )}
         {open &&
-          historyList.map((item) => (
+          historyList?.map((item) => (
             <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-              // onClick={() => handleSelectHistory(item)}
-              >
+              <ListItemButton onClick={() => onChangeThread(item.id)}>
                 <ListItemText
                   primary={
                     <Typography noWrap sx={{ maxWidth: 180 }}>

@@ -4,16 +4,28 @@ import type { Message } from "../types";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
 import { useChatStore } from "../store/chatStore";
-import { useMutation } from "@tanstack/react-query";
-import { postMessage } from "../api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getMessagesById, postMessage } from "../api";
 import { v4 as uuidv4 } from "uuid";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const ChatInterface = () => {
-  const { threadId } = useChatStore();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setMessageList, messageList } = useChatStore();
+  const { setMessageList, messageList, threadId, restoreMessages } =
+    useChatStore();
+
+  const { refetch } = useQuery({
+    queryKey: ["messages", threadId],
+    queryFn: () => getMessagesById(threadId),
+    enabled: !!threadId,
+  });
+
+  useEffect(() => {
+    refetch().then((data) => {
+      restoreMessages(data.data as unknown as Message[]);
+    });
+  }, [threadId]);
 
   const chatMutation = useMutation({
     mutationFn: postMessage,
