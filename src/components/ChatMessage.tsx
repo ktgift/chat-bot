@@ -1,13 +1,9 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import {
-  Box,
-  Card,
-  CardContent,
-  IconButton,
-  Typography
-} from "@mui/material";
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import { Box, Button, Card, CardContent, IconButton, Typography } from "@mui/material";
+import Speech from "react-speech";
+import { TypeAnimation } from "react-type-animation";
 import { Colors } from "../constant";
 import { useChatStore } from "../store/chatStore";
 
@@ -33,6 +29,7 @@ const ChatMessage = ({
   onCopy,
 }: Props) => {
   const { toggleLike, toggleDislike } = useChatStore();
+
   return (
     <Box
       display="flex"
@@ -69,11 +66,11 @@ const ChatMessage = ({
           <Card
             elevation={0}
             sx={{
-              backgroundColor:  Colors.yellowGray,
-              borderRadius: 3
+              backgroundColor: Colors.yellowGray,
+              borderRadius: 3,
             }}
           >
-            <CardContent sx={{ p: 2, pb: '16px !important' }}>
+            <CardContent sx={{ p: 2, pb: "16px !important" }}>
               <Typography
                 variant="body2"
                 sx={{
@@ -96,15 +93,20 @@ const ChatMessage = ({
               // backgroundColor:'red'
             }}
           >
-              <Typography
-                variant="body2"
-                sx={{
-                  whiteSpace: "pre-wrap",
-                  lineHeight: 1.2,
-                }}
-              >
-                {message}
-              </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                whiteSpace: "pre-wrap",
+                lineHeight: 1.2,
+              }}
+            >
+              <TypeAnimation
+                sequence={[message]} // หรือ [message, 1000] เพื่อหน่วงก่อนหยุด
+                speed={50} // ความเร็วการพิมพ์
+                wrapper="span"
+                cursor={false}
+              />
+            </Typography>
           </Box>
         )}
 
@@ -117,33 +119,39 @@ const ChatMessage = ({
             mt={2}
           >
             <Box display="flex" alignItems="center" gap={1}>
-              <IconButton size="small" 
+              <IconButton
+                size="small"
                 sx={{ minWidth: 32, height: 32, p: 0 }}
                 onClick={() => onCopy(message)}
               >
                 <ContentCopyIcon fontSize="small" />
               </IconButton>
-              <IconButton size="small" 
-                sx={{ 
-                  minWidth: 32, height: 32, p: 0,
+              <IconButton
+                size="small"
+                sx={{
+                  minWidth: 32,
+                  height: 32,
+                  p: 0,
                   color: isLiked ? Colors.orangeDark : "text.secondary",
-                 }} 
+                }}
                 onClick={() => toggleLike(id || "")}
               >
                 <SentimentSatisfiedAltIcon fontSize="small" />
               </IconButton>
-              <IconButton size="small" 
-                sx={{ 
-                  minWidth: 32, height: 32, p: 0,
+              <IconButton
+                size="small"
+                sx={{
+                  minWidth: 32,
+                  height: 32,
+                  p: 0,
                   color: isDisliked ? Colors.orangeDark : "text.secondary",
                 }}
                 onClick={() => toggleDislike(id || "")}
               >
                 <SentimentVeryDissatisfiedIcon fontSize="small" />
               </IconButton>
-              {/* <IconButton
+              <Button
                 size="small"
-                loading={isLoading}
                 sx={{
                   height: 32,
                   px: 1,
@@ -152,9 +160,17 @@ const ChatMessage = ({
                   gap: 0.5,
                 }}
               >
-                <ReplayIcon fontSize="small" />
-                <Typography variant="caption">Retry</Typography>
-              </IconButton> */}
+                <Speech
+                  text={message} // ข้อความที่ต้องการให้พูด
+                  lang="EN-US" // ภาษาเสียงที่รองรับ
+                  voice="Daniel" // ชื่อเสียงที่รองรับในระบบ
+                  pitch="1"
+                  rate="1"
+                  volume="1"
+                  textAsButton={true}
+                  displayText="Speak"
+                />
+              </Button>
             </Box>
           </Box>
         )}
