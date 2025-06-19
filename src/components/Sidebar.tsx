@@ -7,6 +7,7 @@ import {
   Drawer as MuiDrawer,
   Stack,
   styled,
+  Typography,
 } from "@mui/material";
 import logo from "../assets/image/logo.png";
 import { useChatStore } from "../store/chatStore";
@@ -51,15 +52,26 @@ export const SideBar = () => {
         sx={{
           display: "flex",
           justifyContent: open ? "flex-start" : "center",
+          alignItems: "center",
           mt: "calc(var(--template-frame-height, 0px) + 4px)",
           p: 1.5,
+          pl: open ? 0.5 : 1.5,
+          cursor: "pointer",
         }}
+        
+        onClick={toggleDrawer}
       >
-        <IconButton
-          onClick={toggleDrawer}
-        >
-          <img src={logo} alt="Logo" style={{ width: 40, height: 40 }} />
-        </IconButton>
+        <img src={logo} alt="Logo" style={{ width: 36, height: 36 }} />
+        {open && (
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ ml: 1, fontWeight: 600 }}
+          >
+            Chat-bot
+          </Typography>
+        )}
       </Box>
       <Divider />
       <Box
@@ -70,14 +82,14 @@ export const SideBar = () => {
           flexDirection: "column",
         }}
       >
-        <MenuHistory />
+        <MenuHistory open={open} />
       </Box>
       <Stack
         direction="row"
         sx={{
           p: 2,
           gap: 1,
-          justifyContent: "center",
+          justifyContent: open ? "flex-start" : "center",
           alignItems: "center",
           // borderTop: '1px solid',
           borderColor: "divider",
@@ -89,6 +101,11 @@ export const SideBar = () => {
           src="/static/images/avatar/7.jpg"
           sx={{ width: 32, height: 32 }}
         />
+        {open && (
+          <Typography variant="body2" noWrap>
+            Kavisara Thisakobsuk
+          </Typography>
+        )}
       </Stack>
     </Drawer>
   );
