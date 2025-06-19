@@ -15,3 +15,8 @@ export const postMessage = async (payload: {
 
   return response.json();
 };
+
+const mock = {
+  threadId: "1",
+  answer: "test",
+};
