@@ -12,8 +12,7 @@ import { useCallback, useEffect, useState } from "react";
 export const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setMessageList, messageList, threadId, restoreMessages } =
-    useChatStore();
+  const { setMessageList, messageList, threadId, restoreMessages, setIsAnimated, isAnimated } = useChatStore();
 
   const { refetch } = useQuery({
     queryKey: ["messages", threadId],
@@ -24,7 +23,9 @@ export const ChatInterface = () => {
   useEffect(() => {
     refetch().then((data) => {
       restoreMessages(data.data as unknown as Message[]);
+      setIsAnimated(false)
     });
+
   }, [threadId]);
 
   const chatMutation = useMutation({
@@ -46,12 +47,13 @@ export const ChatInterface = () => {
     };
 
     setMessageList(userMessage);
+    setIsAnimated(true);
 
     // Simulate bot response
     // ใช้ text ส่งให้ api
     const res = chatMutation.mutate({
       threadId: threadId,
-      question: text,
+      message: text,
     });
     console.log("res", res);
 
@@ -59,15 +61,15 @@ export const ChatInterface = () => {
     console.log("isLoading:", loading);
     setIsLoading(loading); //TODO use this
 
-    setTimeout(() => {
-      const botMessage: Message = {
-        id: uuidv4(),
-        text: "ขอบคุณสำหรับข้อความของคุณ นี่คือการตอบกลับจำลองจาก Chat-bot",
-        isBot: true,
-        showActions: true,
-      };
-      setMessageList(botMessage);
-    }, 1000);
+    // setTimeout(() => {
+    //   const botMessage: Message = {
+    //     id: uuidv4(),
+    //     text: "ขอบคุณสำหรับข้อความของคุณ นี่คือการตอบกลับจำลองจาก Chat-bot",
+    //     isBot: true,
+    //     showActions: true,
+    //   };
+    //   setMessageList(botMessage);
+    // }, 1000);
   };
 
   const handleLikeMessage = (id: string) => {
@@ -123,7 +125,7 @@ export const ChatInterface = () => {
               onLike={handleLikeMessage}
               onDislike={handleDisLikeMessage}
               onCopy={copyClipboard}
-              isAnimated={lastMessage && message.isBot && !isLoading}
+              isAnimated={lastMessage && message.isBot && !isLoading && isAnimated}
             />
           )
           })}
