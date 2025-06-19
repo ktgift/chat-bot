@@ -1,4 +1,3 @@
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
   Avatar,
   Box,
@@ -11,27 +10,31 @@ import {
 } from "@mui/material";
 import logo from "../assets/image/logo.png";
 import { useChatStore } from "../store/chatStore";
+import { useState } from "react";
+import { MenuHistory } from "./MenuHistory";
 
-const drawerWidth = 60;
-const Drawer = styled(MuiDrawer)({
-  width: drawerWidth,
+const collapsedWidth = 60;
+const expandedWidth = 240;
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<{ open: boolean }>(({ open }) => ({
+  width: open ? expandedWidth : collapsedWidth,
   flexShrink: 0,
+  whiteSpace: "nowrap",
   boxSizing: "border-box",
-  mt: 10,
   [`& .${drawerClasses.paper}`]: {
-    width: drawerWidth,
-    boxSizing: "border-box",
+    width: open ? expandedWidth : collapsedWidth,
+    transition: "width 0.3s",
+    overflowX: "hidden",
   },
-});
+}));
 
 export const SideBar = () => {
-  const { clearMessageList, setThreadId } = useChatStore();
+  const [open, setOpen] = useState(false);
 
-  const handleClearChat = () => {
-    console.log("Chat cleared");
-    clearMessageList();
-    setThreadId();
-  };
+  const toggleDrawer = () => setOpen((prev) => !prev);
+
 
   return (
     <Drawer
@@ -42,16 +45,21 @@ export const SideBar = () => {
           backgroundColor: "",
         },
       }}
+      open={open}
     >
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: open ? "flex-start" : "center",
           mt: "calc(var(--template-frame-height, 0px) + 4px)",
           p: 1.5,
         }}
       >
-        <img src={logo} alt="Logo" style={{ width: 40, height: 40 }} />
+        <IconButton
+          onClick={toggleDrawer}
+        >
+          <img src={logo} alt="Logo" style={{ width: 40, height: 40 }} />
+        </IconButton>
       </Box>
       <Divider />
       <Box
@@ -62,9 +70,7 @@ export const SideBar = () => {
           flexDirection: "column",
         }}
       >
-        <IconButton onClick={handleClearChat}>
-          <AddCircleIcon fontSize="large" sx={{ color: "black" }} />
-        </IconButton>
+        <MenuHistory />
       </Box>
       <Stack
         direction="row"

@@ -4,15 +4,31 @@ import type { Message } from "../types";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
 import { useChatStore } from "../store/chatStore";
+import { useMutation } from "@tanstack/react-query";
+import { postMessage } from "../api";
+import { v4 as uuidv4 } from "uuid";
+import { useCallback, useState } from "react";
 
 export const ChatInterface = () => {
   const { threadId } = useChatStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { setMessageList, messageList } = useChatStore();
 
+  const chatMutation = useMutation({
+    mutationFn: postMessage,
+    onSuccess: (data) => {
+      // save by threadId
+      console.debug("Success:", data);
+    },
+    onError: (error) => {
+      console.debug("Error:", error);
+    },
+  });
+
   const handleSendMessage = (text: string) => {
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: uuidv4(),
       text,
       isBot: false,
     };
@@ -21,9 +37,19 @@ export const ChatInterface = () => {
 
     // Simulate bot response
     // ใช้ text ส่งให้ api
+    const res = chatMutation.mutate({
+      threadId: threadId,
+      question: text,
+    });
+    console.log("res", res);
+
+    const loading = chatMutation.isPending; //TODO test
+    console.log("isLoading:", loading);
+    setIsLoading(loading); //TODO use this
+
     setTimeout(() => {
       const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: uuidv4(),
         text: "ขอบคุณสำหรับข้อความของคุณ นี่คือการตอบกลับจำลองจาก Chat-bot",
         isBot: true,
         showActions: true,
@@ -43,7 +69,7 @@ export const ChatInterface = () => {
       isDisliked: false,
     };
     setMessageList(newMessage);
-  }
+  };
 
   const handleDisLikeMessage = (id: string) => {
     const message = messageList.find((msg: Message) => msg.id === id);
@@ -57,6 +83,10 @@ export const ChatInterface = () => {
     };
     setMessageList(newMessage);
   };
+
+  const copyClipboard = useCallback(async (value: string) => {
+    await navigator.clipboard.writeText(value);
+  }, []);
 
   return (
     <Box
@@ -78,13 +108,14 @@ export const ChatInterface = () => {
               isDisliked={message.isDisliked}
               onLike={handleLikeMessage}
               onDislike={handleDisLikeMessage}
+              onCopy={copyClipboard}
             />
           ))}
         </Container>
       </Box>
 
       <Container maxWidth="lg" sx={{ width: "100%" }}>
-        <ChatInput threadId={threadId} onSendMessage={handleSendMessage} />
+        <ChatInput isLoading={isLoading} onSendMessage={handleSendMessage} />
         <Box mb={2} display={"flex"} justifyContent="flex-end">
           <Typography variant="caption" color="text.secondary">
             Chat-Bot can make mistakes. Please double-check responses.

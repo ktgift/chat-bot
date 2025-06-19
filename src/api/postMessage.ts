@@ -2,7 +2,7 @@ export const postMessage = async (payload: {
   threadId: string;
   question: string;
 }) => {
-  const url = "https://api.example.com/message";
+  const url = "https://jsonplaceholder.typicode.com/posts";
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

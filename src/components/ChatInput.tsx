@@ -2,38 +2,21 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Box, Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { Colors } from "../constant";
-import { useMutation } from "@tanstack/react-query";
-import { postMessage } from "../api";
 
 type Props = {
   disabled?: boolean;
-  threadId: string;
+  isLoading: boolean;
   onSendMessage: (message: string) => void;
 };
 
-const ChatInput = ({ onSendMessage, disabled = false, threadId }: Props) => {
+const ChatInput = ({ onSendMessage, disabled = false, isLoading }: Props) => {
   const [message, setMessage] = useState("");
-
-  const chatMutation = useMutation({
-    mutationFn: postMessage,
-    onSuccess: (data) => {
-      // save by threadId
-      console.debug("Success:", data);
-    },
-    onError: (error) => {
-      console.debug("Error:", error);
-    },
-  });
-
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim() && !disabled) {
       onSendMessage(message.trim());
       setMessage("");
-      chatMutation.mutate({
-        threadId: threadId,
-        question: message,
-      });
     }
   };
 
@@ -107,6 +90,7 @@ const ChatInput = ({ onSendMessage, disabled = false, threadId }: Props) => {
               size="small"
               disabled={disabled || !message.trim()}
               type="submit"
+              loading={isLoading}
               sx={{
                 minWidth: 32,
                 height: 32,

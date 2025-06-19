@@ -21,6 +21,7 @@ type Props = {
   isDisliked?: boolean;
   onLike: (id: string) => void;
   onDislike: (id: string) => void;
+  onCopy: (message: string) => void;
 };
 
 const ChatMessage = ({
@@ -30,6 +31,7 @@ const ChatMessage = ({
   showActions = false,
   isLiked = false,
   isDisliked = false,
+  onCopy,
 }: Props) => {
   const { toggleLike, toggleDislike } = useChatStore();
   return (
@@ -72,7 +74,7 @@ const ChatMessage = ({
               borderRadius: 3
             }}
           >
-            <CardContent sx={{ p: 2 }}>
+            <CardContent sx={{ p: 2, pb: '16px !important' }}>
               <Typography
                 variant="body2"
                 sx={{
@@ -118,6 +120,7 @@ const ChatMessage = ({
             <Box display="flex" alignItems="center" gap={1}>
               <IconButton size="small" 
                 sx={{ minWidth: 32, height: 32, p: 0 }}
+                onClick={() => onCopy(message)}
               >
                 <ContentCopyIcon fontSize="small" />
               </IconButton>
@@ -139,8 +142,9 @@ const ChatMessage = ({
               >
                 <ThumbDownOffAltIcon fontSize="small" />
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 size="small"
+                loading={isLoading}
                 sx={{
                   height: 32,
                   px: 1,
@@ -151,7 +155,7 @@ const ChatMessage = ({
               >
                 <ReplayIcon fontSize="small" />
                 <Typography variant="caption">Retry</Typography>
-              </IconButton>
+              </IconButton> */}
             </Box>
           </Box>
         )}
