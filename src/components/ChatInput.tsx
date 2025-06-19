@@ -84,7 +84,7 @@ const ChatInput = ({ onSendMessage, disabled = false, isLoading }: Props) => {
             }}
           >
             {/* <Typography variant="body2" color="text.secondary">
-              Chat-bot 4
+              Lao Noi Di
             </Typography> */}
             <Button
               size="small"

@@ -69,7 +69,7 @@ export const SideBar = () => {
             component="div"
             sx={{ ml: 1, fontWeight: 600 }}
           >
-            Chat-bot
+            Lao Noi Di
           </Typography>
         )}
       </Box>

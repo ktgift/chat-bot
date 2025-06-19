@@ -118,7 +118,7 @@ export const ChatInterface = () => {
         <ChatInput isLoading={isLoading} onSendMessage={handleSendMessage} />
         <Box mb={2} display={"flex"} justifyContent="flex-end">
           <Typography variant="caption" color="text.secondary">
-            Chat-Bot can make mistakes. Please double-check responses.
+            Lao Noi Di can make mistakes. Please double-check responses.
           </Typography>
         </Box>
       </Container>
