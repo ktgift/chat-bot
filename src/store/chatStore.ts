@@ -7,7 +7,8 @@ type ChatState = {
   setMessageList: (message: Message) => void;
   clearMessageList: () => void;
   threadId: string;
-  setThreadId: () => void;
+  setThreadId: (id: string) => void;
+  setNewThreadId: () => void;
   toggleLike: (id: string) => void;
   toggleDislike: (id: string) => void;
 };
@@ -18,7 +19,8 @@ export const useChatStore = create<ChatState>((set) => ({
     set((state) => ({ messageList: [...state.messageList, message] })),
   clearMessageList: () => set({ messageList: [] }),
   threadId: uuidv4(),
-  setThreadId: () => set({ threadId: uuidv4() }),
+  setNewThreadId: () => set({ threadId: uuidv4() }),
+  setThreadId: (id: string) => set({ threadId: id }),
   toggleLike: (id: string) =>
     set((state) => ({
       messageList: state.messageList.map((msg) =>
