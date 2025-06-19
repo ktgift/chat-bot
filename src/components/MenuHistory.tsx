@@ -15,8 +15,7 @@ type Props = {
 };
 
 export const MenuHistory = ({ open }: Props) => {
-  const { clearMessageList, setThreadId, setNewThreadId, threadId } =
-    useChatStore();
+  const { clearMessageList, setThreadId, setNewThreadId } = useChatStore();
 
   const mainListItems = [
     {
@@ -26,9 +25,8 @@ export const MenuHistory = ({ open }: Props) => {
   ];
 
   const { data: historyList } = useQuery({
-    queryKey: ["messages", threadId],
+    queryKey: ["messages"],
     queryFn: () => getMessages(),
-    enabled: !!threadId,
   });
 
   const handleClearChat = () => {
