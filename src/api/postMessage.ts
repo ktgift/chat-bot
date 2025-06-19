@@ -2,7 +2,8 @@ export const postMessage = async (payload: {
   threadId: string;
   message: string;
 }) => {
-  const url = "https://jsonplaceholder.typicode.com/posts";
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const url = `${baseUrl}/message`;
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -13,7 +14,7 @@ export const postMessage = async (payload: {
     throw new Error("Failed to submit data");
   }
 
-  return response.json();
+  return await response.json();
 };
 
 const mock = {

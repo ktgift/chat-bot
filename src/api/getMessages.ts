@@ -5,8 +5,7 @@ export type GetMessagesResponse = {
 };
 
 export const getMessages = async (): Promise<GetMessagesResponse[]> => {
-  return mock; // comment this
-
+  // return mock; // comment this
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const url = `${baseUrl}/message`;
   const response = await fetch(url, {
@@ -17,8 +16,14 @@ export const getMessages = async (): Promise<GetMessagesResponse[]> => {
   if (!response.ok) {
     throw new Error("Failed to get data");
   }
-
-  return response.json();
+  const res = await response.json();
+  return res.map((item: any) => {
+    return {
+      id: item.thread_id,
+      title: item.messages,
+      role: item.role,
+    };
+  });
 };
 
 export const mock = [
