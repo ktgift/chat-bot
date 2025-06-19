@@ -51,7 +51,7 @@ export const ChatInterface = () => {
     // ใช้ text ส่งให้ api
     const res = chatMutation.mutate({
       threadId: threadId,
-      question: text,
+      message: text,
     });
     console.log("res", res);
 
@@ -112,20 +112,20 @@ export const ChatInterface = () => {
           {messageList.map((message, index) => {
             const lastMessage = index === messageList.length - 1;
             return (
-            <ChatMessage
-              key={message.id}
-              id={message.id}
-              message={message.text}
-              isBot={message.isBot}
-              showActions={message.showActions}
-              isLiked={message.isLiked}
-              isDisliked={message.isDisliked}
-              onLike={handleLikeMessage}
-              onDislike={handleDisLikeMessage}
-              onCopy={copyClipboard}
-              isAnimated={lastMessage && message.isBot && !isLoading}
-            />
-          )
+              <ChatMessage
+                key={message.id}
+                id={message.id}
+                message={message.text}
+                isBot={message.isBot}
+                showActions={message.showActions}
+                isLiked={message.isLiked}
+                isDisliked={message.isDisliked}
+                onLike={handleLikeMessage}
+                onDislike={handleDisLikeMessage}
+                onCopy={copyClipboard}
+                isAnimated={lastMessage && message.isBot && !isLoading}
+              />
+            );
           })}
         </Container>
       </Box>

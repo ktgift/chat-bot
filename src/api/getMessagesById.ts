@@ -10,7 +10,7 @@ export type GetMessagesByIdResponse = {
 export const getMessagesById = async (
   threadId: string
 ): Promise<GetMessagesByIdResponse[]> => {
-  return mock;
+  // return mock;
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const url = `${baseUrl}/message/${threadId}`;
   const response = await fetch(url, {
@@ -21,7 +21,7 @@ export const getMessagesById = async (
   if (!response.ok) {
     throw new Error("Failed to get data");
   }
-  return response.json();
+  return await response.json();
 };
 
 const mock = [
