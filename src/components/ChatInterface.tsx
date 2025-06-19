@@ -12,7 +12,14 @@ import { useCallback, useEffect, useState } from "react";
 export const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setMessageList, messageList, threadId, restoreMessages, setIsAnimated, isAnimated } = useChatStore();
+  const {
+    setMessageList,
+    messageList,
+    threadId,
+    restoreMessages,
+    setIsAnimated,
+    isAnimated,
+  } = useChatStore();
 
   const { refetch } = useQuery({
     queryKey: ["messages", threadId],
@@ -23,9 +30,8 @@ export const ChatInterface = () => {
   useEffect(() => {
     refetch().then((data) => {
       restoreMessages(data.data as unknown as Message[]);
-      setIsAnimated(false)
+      setIsAnimated(false);
     });
-
   }, [threadId]);
 
   const chatMutation = useMutation({
@@ -112,22 +118,27 @@ export const ChatInterface = () => {
       <Box flex={1} overflow="auto" p={2}>
         <Container maxWidth="lg">
           {messageList.map((message, index) => {
+            console.log("message", messageList);
             const lastMessage = index === messageList.length - 1;
             return (
-            <ChatMessage
-              key={message.id}
-              id={message.id}
-              message={message.text}
-              isBot={message.isBot}
-              showActions={message.showActions}
-              isLiked={message.isLiked}
-              isDisliked={message.isDisliked}
-              onLike={handleLikeMessage}
-              onDislike={handleDisLikeMessage}
-              onCopy={copyClipboard}
-              isAnimated={lastMessage && message.isBot && !isLoading && isAnimated}
-            />
-          )
+              message.text !== "" && (
+                <ChatMessage
+                  key={message.id}
+                  id={message.id}
+                  message={message.text}
+                  isBot={message.isBot}
+                  showActions={message.showActions}
+                  isLiked={message.isLiked}
+                  isDisliked={message.isDisliked}
+                  onLike={handleLikeMessage}
+                  onDislike={handleDisLikeMessage}
+                  onCopy={copyClipboard}
+                  isAnimated={
+                    lastMessage && message.isBot && !isLoading && isAnimated
+                  }
+                />
+              )
+            );
           })}
         </Container>
       </Box>
