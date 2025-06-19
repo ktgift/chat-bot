@@ -35,12 +35,8 @@ export const MenuHistory = ({ open }: Props) => {
     setNewThreadId();
   };
 
-  const onChangeThread = (id?: string) => {
-    if (id) {
-      setThreadId(id);
-    } else {
-      handleClearChat();
-    }
+  const onChangeThread = (id: string) => {
+    setThreadId(id);
   };
 
   // const handleSelectHistory = (item: type) => {
