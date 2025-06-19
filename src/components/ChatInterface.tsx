@@ -1,21 +1,13 @@
-import { useEffect, useState } from "react";
 import { Box, Container, Typography } from "@mui/material";
 import { Colors } from "../constant";
 import type { Message } from "../types";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
-import { v4 as uuidv4 } from "uuid";
 import { useChatStore } from "../store/chatStore";
 
 export const ChatInterface = () => {
-  const [threadId, setThreadId] = useState<string>("");
+  const { threadId } = useChatStore();
 
-  useEffect(() => {
-    if (!threadId) {
-      const newThreadId = uuidv4();
-      setThreadId(newThreadId);
-    }
-  }, []);
   const { setMessageList, messageList } = useChatStore();
 
   const handleSendMessage = (text: string) => {
