@@ -3,4 +3,6 @@ export interface Message {
   text: string;
   isBot: boolean;
   showActions?: boolean;
+  isLiked?: boolean;
+  isDisliked?: boolean;
 }
