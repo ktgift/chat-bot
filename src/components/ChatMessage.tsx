@@ -1,7 +1,6 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import ReplayIcon from "@mui/icons-material/Replay";
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import {
   Box,
   Card,
@@ -131,7 +130,7 @@ const ChatMessage = ({
                  }} 
                 onClick={() => toggleLike(id || "")}
               >
-                <ThumbUpOffAltIcon fontSize="small" />
+                <SentimentSatisfiedAltIcon fontSize="small" />
               </IconButton>
               <IconButton size="small" 
                 sx={{ 
@@ -140,7 +139,7 @@ const ChatMessage = ({
                 }}
                 onClick={() => toggleDislike(id || "")}
               >
-                <ThumbDownOffAltIcon fontSize="small" />
+                <SentimentVeryDissatisfiedIcon fontSize="small" />
               </IconButton>
               {/* <IconButton
                 size="small"
