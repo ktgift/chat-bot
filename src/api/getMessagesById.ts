@@ -21,11 +21,10 @@ export const getMessagesById = async (
   if (!response.ok) {
     throw new Error("Failed to get data");
   }
-
   return response.json();
 };
 
-export const mock = [
+const mock = [
   {
     id: "1",
     text: "Hello! How can I help you today?",
