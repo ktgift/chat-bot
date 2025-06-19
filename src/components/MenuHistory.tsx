@@ -35,8 +35,12 @@ export const MenuHistory = ({ open }: Props) => {
     setNewThreadId();
   };
 
-  const onChangeThread = (id: string) => {
-    setThreadId(id);
+  const onChangeThread = (id?: string) => {
+    if (id) {
+      setThreadId(id);
+    } else {
+      handleClearChat();
+    }
   };
 
   // const handleSelectHistory = (item: type) => {
@@ -71,9 +75,7 @@ export const MenuHistory = ({ open }: Props) => {
         {open &&
           historyList?.map((item) => (
             <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-              // onClick={() => handleSelectHistory(item)}
-              >
+              <ListItemButton onClick={() => onChangeThread(item.id)}>
                 <ListItemText
                   primary={
                     <Typography noWrap sx={{ maxWidth: 180 }}>
