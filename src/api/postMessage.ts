@@ -1,6 +1,6 @@
 export const postMessage = async (payload: {
   threadId: string;
-  question: string;
+  message: string;
 }) => {
   const url = "https://jsonplaceholder.typicode.com/posts";
   const response = await fetch(url, {
