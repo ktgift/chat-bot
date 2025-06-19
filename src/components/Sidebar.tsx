@@ -97,13 +97,13 @@ export const SideBar = () => {
       >
         <Avatar
           sizes="small"
-          alt="Kavisara"
+          alt="Test Avatar"
           src="/static/images/avatar/7.jpg"
           sx={{ width: 32, height: 32 }}
         />
         {open && (
           <Typography variant="body2" noWrap>
-            Kavisara Thisakobsuk
+            Test Avatar
           </Typography>
         )}
       </Stack>
