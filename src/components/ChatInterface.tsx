@@ -12,8 +12,14 @@ import { useCallback, useEffect, useState } from "react";
 export const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setMessageList, messageList, threadId, restoreMessages } =
-    useChatStore();
+  const {
+    setMessageList,
+    messageList,
+    threadId,
+    restoreMessages,
+    setIsAnimated,
+    isAnimated,
+  } = useChatStore();
 
   const { refetch } = useQuery({
     queryKey: ["messages", threadId],
@@ -24,6 +30,7 @@ export const ChatInterface = () => {
   useEffect(() => {
     refetch().then((data) => {
       restoreMessages(data.data as unknown as Message[]);
+      setIsAnimated(false);
     });
   }, [threadId]);
 
@@ -46,6 +53,7 @@ export const ChatInterface = () => {
     };
 
     setMessageList(userMessage);
+    setIsAnimated(true);
 
     // Simulate bot response
     // ใช้ text ส่งให้ api
@@ -59,15 +67,15 @@ export const ChatInterface = () => {
     console.log("isLoading:", loading);
     setIsLoading(loading); //TODO use this
 
-    setTimeout(() => {
-      const botMessage: Message = {
-        id: uuidv4(),
-        text: "ขอบคุณสำหรับข้อความของคุณ นี่คือการตอบกลับจำลองจาก Chat-bot",
-        isBot: true,
-        showActions: true,
-      };
-      setMessageList(botMessage);
-    }, 1000);
+    // setTimeout(() => {
+    //   const botMessage: Message = {
+    //     id: uuidv4(),
+    //     text: "ขอบคุณสำหรับข้อความของคุณ นี่คือการตอบกลับจำลองจาก Chat-bot",
+    //     isBot: true,
+    //     showActions: true,
+    //   };
+    //   setMessageList(botMessage);
+    // }, 1000);
   };
 
   const handleLikeMessage = (id: string) => {
@@ -110,21 +118,26 @@ export const ChatInterface = () => {
       <Box flex={1} overflow="auto" p={2}>
         <Container maxWidth="lg">
           {messageList.map((message, index) => {
+            console.log("message", messageList);
             const lastMessage = index === messageList.length - 1;
             return (
-              <ChatMessage
-                key={message.id}
-                id={message.id}
-                message={message.text}
-                isBot={message.isBot}
-                showActions={message.showActions}
-                isLiked={message.isLiked}
-                isDisliked={message.isDisliked}
-                onLike={handleLikeMessage}
-                onDislike={handleDisLikeMessage}
-                onCopy={copyClipboard}
-                isAnimated={lastMessage && message.isBot && !isLoading}
-              />
+              message.text !== "" && (
+                <ChatMessage
+                  key={message.id}
+                  id={message.id}
+                  message={message.text}
+                  isBot={message.isBot}
+                  showActions={message.showActions}
+                  isLiked={message.isLiked}
+                  isDisliked={message.isDisliked}
+                  onLike={handleLikeMessage}
+                  onDislike={handleDisLikeMessage}
+                  onCopy={copyClipboard}
+                  isAnimated={
+                    lastMessage && message.isBot && !isLoading && isAnimated
+                  }
+                />
+              )
             );
           })}
         </Container>

@@ -12,6 +12,8 @@ type ChatState = {
   setNewThreadId: () => void;
   toggleLike: (id: string) => void;
   toggleDislike: (id: string) => void;
+  isAnimated: boolean;
+  setIsAnimated: (isAnimated: boolean) => void;
 };
 
 export const useChatStore = create<ChatState>((set) => ({
@@ -47,4 +49,6 @@ export const useChatStore = create<ChatState>((set) => ({
           : msg
       ),
     })),
+  isAnimated: false,
+  setIsAnimated: (isAnimated: boolean) => set({ isAnimated: isAnimated })
 }));
