@@ -1,7 +1,14 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import { Box, Button, Card, CardContent, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import Speech from "react-speech";
 import { TypeAnimation } from "react-type-animation";
 import { Colors } from "../constant";
@@ -14,6 +21,7 @@ type Props = {
   showActions?: boolean;
   isLiked?: boolean;
   isDisliked?: boolean;
+  isAnimated: boolean;
   onLike: (id: string) => void;
   onDislike: (id: string) => void;
   onCopy: (message: string) => void;
@@ -26,6 +34,7 @@ const ChatMessage = ({
   showActions = false,
   isLiked = false,
   isDisliked = false,
+  isAnimated = true,
   onCopy,
 }: Props) => {
   const { toggleLike, toggleDislike } = useChatStore();
@@ -100,12 +109,16 @@ const ChatMessage = ({
                 lineHeight: 1.2,
               }}
             >
-              <TypeAnimation
-                sequence={[message]} // หรือ [message, 1000] เพื่อหน่วงก่อนหยุด
-                speed={50} // ความเร็วการพิมพ์
-                wrapper="span"
-                cursor={false}
-              />
+              {isAnimated ? (
+                <TypeAnimation
+                  sequence={[message]} // หรือ [message, 1000] เพื่อหน่วงก่อนหยุด
+                  speed={50} // ความเร็วการพิมพ์
+                  wrapper="span"
+                  cursor={false}
+                />
+              ) : (
+                message
+              )}
             </Typography>
           </Box>
         )}

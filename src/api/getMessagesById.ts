@@ -48,11 +48,13 @@ export const mock = [
     id: "4",
     text: "Thanks, that's helpful!",
     isBot: false,
+    showActions: false,
   },
   {
     id: "5",
     text: "You're welcome! 😊",
     isBot: true,
+    showActions: true,
     // isLiked: true,
   },
 ];
