@@ -1,6 +1,8 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import {
   Box,
   Button,
@@ -9,10 +11,10 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import Speech from "react-speech";
-import { TypeAnimation } from "react-type-animation";
 import { Colors } from "../constant";
 import { useChatStore } from "../store/chatStore";
+import { TypedHtml } from "../util/typing";
+import { useRef, useState } from "react";
 
 type Props = {
   id?: string;
@@ -25,6 +27,7 @@ type Props = {
   onLike: (id: string) => void;
   onDislike: (id: string) => void;
   onCopy: (message: string) => void;
+  file?: string;
 };
 
 const ChatMessage = ({
@@ -36,8 +39,43 @@ const ChatMessage = ({
   isDisliked = false,
   isAnimated = true,
   onCopy,
+  file,
 }: Props) => {
   const { toggleLike, toggleDislike } = useChatStore();
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentFile, setCurrentFile] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlayFile = (fileUrl: string) => {
+    if (!fileUrl) return;
+
+    // กรณีไฟล์เดิม และเล่นอยู่ -> กดอีกครั้ง = หยุด
+    if (audioRef.current && currentFile === fileUrl && isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    // ถ้ามีไฟล์ก่อนหน้า (อาจเป็นไฟล์ใหม่)
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+
+    // เล่นไฟล์ใหม่
+    const audio = new Audio(fileUrl);
+    audio.playbackRate = 1.5 ; // ปรับความเร็วการเล่น
+    audioRef.current = audio;
+    setCurrentFile(fileUrl);
+    audio.play();
+    setIsPlaying(true);
+
+    // เมื่อเล่นจบ ให้ reset state
+    audio.onended = () => {
+      setIsPlaying(false);
+    };
+  };
 
   return (
     <Box
@@ -46,31 +84,6 @@ const ChatMessage = ({
       mb={3}
     >
       <Box sx={{ maxWidth: "74rem", width: isBot ? "100%" : "auto" }}>
-        {!isBot && (
-          <Box display="flex-end" alignItems="center" mb={1}>
-            {/* <Box
-              sx={{
-                width: 24,
-                height: 24,
-                bgcolor: 'grey.900',
-                color: 'white',
-                fontSize: 12,
-                fontWeight: 600,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mr: 1
-              }}
-            >
-              CY
-            </Box> */}
-            {/* <Typography variant="body2" color="text.secondary">
-              คุยกับอินโฟมากไทย
-            </Typography> */}
-          </Box>
-        )}
-
         {!isBot && (
           <Card
             elevation={0}
@@ -99,27 +112,25 @@ const ChatMessage = ({
             sx={{
               color: "text.primary",
               py: 2,
-              // backgroundColor:'red'
             }}
           >
-            <Typography
-              variant="body2"
-              sx={{
-                whiteSpace: "pre-wrap",
-                lineHeight: 1.2,
-              }}
-            >
-              {isAnimated ? (
-                <TypeAnimation
-                  sequence={[message]} // หรือ [message, 1000] เพื่อหน่วงก่อนหยุด
-                  speed={50} // ความเร็วการพิมพ์
-                  wrapper="span"
-                  cursor={false}
-                />
-              ) : (
-                message
-              )}
-            </Typography>
+            {isAnimated ? (
+              <TypedHtml
+                html={message}
+                speed={30}
+                sx={{ color: "black", lineHeight: 1.2 }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  "& h2": { fontWeight: "bold", fontSize: "1.5rem" },
+                  "& ul": { pl: 2 },
+                  "& li": { mb: 1 },
+                  "& strong": { fontWeight: "bold" },
+                }}
+                dangerouslySetInnerHTML={{ __html: message }}
+              />
+            )}
           </Box>
         )}
 
@@ -163,27 +174,21 @@ const ChatMessage = ({
               >
                 <SentimentVeryDissatisfiedIcon fontSize="small" />
               </IconButton>
-              <Button
+              <IconButton
                 size="small"
-                sx={{
-                  height: 32,
-                  px: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                }}
+                onClick={() => handlePlayFile(file ?? "")}
               >
-                <Speech
-                  text={message} // ข้อความที่ต้องการให้พูด
-                  lang="EN-US" // ภาษาเสียงที่รองรับ
-                  voice="Daniel" // ชื่อเสียงที่รองรับในระบบ
-                  pitch="1"
-                  rate="1"
-                  volume="1"
-                  textAsButton={true}
-                  displayText="Speak"
-                />
-              </Button>
+                {isPlaying ? (
+                  <PauseCircleIcon
+                    fontSize="small"
+                    sx={{ color: isPlaying ? Colors.orangeDark : undefined }}
+                  />
+                ) : (
+                  <VolumeUpIcon fontSize="small"
+                    sx={{ color: isPlaying ? Colors.orangeDark : undefined }}
+                  />
+                )}
+              </IconButton>
             </Box>
           </Box>
         )}

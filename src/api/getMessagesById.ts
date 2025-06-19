@@ -7,11 +7,12 @@ export type GetMessagesByIdResponse = {
   isDisliked?: boolean;
 };
 
+export const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 export const getMessagesById = async (
   threadId: string
 ): Promise<GetMessagesByIdResponse[]> => {
   // return mock;
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const url = `${baseUrl}/message/${threadId}`;
   const response = await fetch(url, {
     method: "GET",

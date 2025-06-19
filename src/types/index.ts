@@ -5,4 +5,5 @@ export interface Message {
   showActions?: boolean;
   isLiked?: boolean;
   isDisliked?: boolean;
+  audioPath?: string;
 }

@@ -5,12 +5,13 @@ import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
 import { useChatStore } from "../store/chatStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getMessagesById, postMessage } from "../api";
+import { baseUrl, getMessagesById, postMessage } from "../api";
 import { v4 as uuidv4 } from "uuid";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   const {
     setMessageList,
@@ -27,6 +28,8 @@ export const ChatInterface = () => {
     enabled: !!threadId,
   });
 
+  console.log('messageList xxx', messageList)
+
   useEffect(() => {
     refetch().then((data) => {
       restoreMessages(data.data as unknown as Message[]);
@@ -38,6 +41,7 @@ export const ChatInterface = () => {
     mutationFn: postMessage,
     onSuccess: (data) => {
       // save by threadId
+      setIsLoading(false);
       console.debug("Success:", data);
     },
     onError: (error) => {
@@ -45,7 +49,7 @@ export const ChatInterface = () => {
     },
   });
 
-  const handleSendMessage = (text: string) => {
+  const handleSendMessage = async (text: string) => {
     const userMessage: Message = {
       id: uuidv4(),
       text,
@@ -55,27 +59,21 @@ export const ChatInterface = () => {
     setMessageList(userMessage);
     setIsAnimated(true);
 
-    // Simulate bot response
-    // ใช้ text ส่งให้ api
-    const res = chatMutation.mutate({
+    setIsLoading(true)
+    const res = await chatMutation.mutateAsync({
       threadId: threadId,
       message: text,
     });
-    console.log("res", res);
+    // console.log("res", res);
 
-    const loading = chatMutation.isPending; //TODO test
-    console.log("isLoading:", loading);
-    setIsLoading(loading); //TODO use this
-
-    // setTimeout(() => {
-    //   const botMessage: Message = {
-    //     id: uuidv4(),
-    //     text: "ขอบคุณสำหรับข้อความของคุณ นี่คือการตอบกลับจำลองจาก Chat-bot",
-    //     isBot: true,
-    //     showActions: true,
-    //   };
-    //   setMessageList(botMessage);
-    // }, 1000);
+    const botMessage: Message = {
+      id: uuidv4(),
+      text: res.answer || "",
+      isBot: true,
+      showActions: true,
+      audioPath: res.audioPath || "",
+    };
+    setMessageList(botMessage);
   };
 
   const handleLikeMessage = (id: string) => {
@@ -133,6 +131,7 @@ export const ChatInterface = () => {
                   onLike={handleLikeMessage}
                   onDislike={handleDisLikeMessage}
                   onCopy={copyClipboard}
+                  file={message.audioPath ? `${baseUrl}${message.audioPath}` : undefined}
                   isAnimated={
                     lastMessage && message.isBot && !isLoading && isAnimated
                   }

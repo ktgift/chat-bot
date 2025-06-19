@@ -9,6 +9,7 @@ import { useChatStore } from "../store/chatStore";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { getMessages } from "../api";
+import { useState } from "react";
 
 type Props = {
   open: boolean;
@@ -16,6 +17,7 @@ type Props = {
 
 export const MenuHistory = ({ open }: Props) => {
   const { clearMessageList, setThreadId, setNewThreadId } = useChatStore();
+  const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
 
   const mainListItems = [
     {
@@ -33,10 +35,13 @@ export const MenuHistory = ({ open }: Props) => {
     console.log("Chat cleared");
     clearMessageList();
     setNewThreadId();
+    setSelectedThreadId(null);
   };
 
   const onChangeThread = (id: string) => {
     setThreadId(id);
+    clearMessageList();
+    setSelectedThreadId(id);
   };
 
   // const handleSelectHistory = (item: type) => {
@@ -71,7 +76,10 @@ export const MenuHistory = ({ open }: Props) => {
         {open &&
           historyList?.map((item) => (
             <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
-              <ListItemButton onClick={() => onChangeThread(item.id)}>
+              <ListItemButton
+                selected={selectedThreadId === item.id}
+                onClick={() => onChangeThread(item.id)}
+              >
                 <ListItemText
                   primary={
                     <Typography noWrap sx={{ maxWidth: 180 }}>
